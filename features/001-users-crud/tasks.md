@@ -44,9 +44,9 @@
 ## Fase 4 — US-2 Consultar usuarios (P1)
 
 ### Pruebas (primero)
-- [ ] T024 [P] [US2] Unit: `list_users` y `get_user`. (FR-001, FR-002)
-- [ ] T025 [P] [US2] Integración: `GET /users` solo activos, paginación, límites 422. (FR-001)
-- [ ] T026 [P] [US2] Integración: `GET /users/{id}` activo, inactivo, 404, id no UUID 422. (FR-002)
+- [x] T024 [P] [US2] Unit: `list_users` y `get_user`. (FR-001, FR-002)
+- [x] T025 [P] [US2] Integración: `GET /users` solo activos, paginación, límites 422. (FR-001)
+- [x] T026 [P] [US2] Integración: `GET /users/{id}` activo, inactivo, 404, id no UUID 422. (FR-002)
 
 ### Implementación
 - [ ] T027 [US2] Repositorio: `get_by_id`, `list_active(limit, offset)`, `count_active`.
