@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Users API
-  version: 0.3.0
+  version: 0.4.0
   description: >-
     Contrato canónico de la API REST de usuarios. Este archivo es la fuente de verdad
     del contrato HTTP (ADR-0002) y no una implementación.
@@ -312,6 +312,8 @@ components:
           - EMAIL_ALREADY_EXISTS
           - SERVICE_UNAVAILABLE
           - INTERNAL_ERROR
+          - NOT_FOUND
+          - METHOD_NOT_ALLOWED
         message:
           type: string
         details:

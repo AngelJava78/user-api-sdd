@@ -69,7 +69,7 @@ Como cliente quiero desactivar un usuario sin perder su registro.
 | FR-007 | `PUT` DEBE modificar solo `name`, `lastname`, `second_lastname` y rechazar cualquier otro campo. | US-3 |
 | FR-008 | `DELETE` DEBE desactivar lógicamente (`status = false`) sin borrar el registro. | US-4 |
 | FR-009 | `DELETE` sobre un usuario ya inactivo DEBE responder 204 sin cambios. | US-4 |
-| FR-010 | Todos los errores DEBEN usar el esquema `Error` con códigos estables (`VALIDATION_ERROR`, `USER_NOT_FOUND`, `EMAIL_ALREADY_EXISTS`, `SERVICE_UNAVAILABLE`, `INTERNAL_ERROR`). | Todas |
+| FR-010 | Todos los errores DEBEN usar el esquema `Error` con códigos estables (`VALIDATION_ERROR`, `USER_NOT_FOUND`, `EMAIL_ALREADY_EXISTS`, `SERVICE_UNAVAILABLE`, `INTERNAL_ERROR`, `NOT_FOUND`, `METHOD_NOT_ALLOWED`). | Todas |
 | FR-011 | El sistema DEBE exponer `GET /health/live` (proceso vivo) y `GET /health/ready` (puede recibir tráfico; verifica PostgreSQL). | Operación |
 
 ## Requisitos no funcionales
@@ -110,6 +110,7 @@ Como cliente quiero desactivar un usuario sin perder su registro.
 - P: ¿Existe reactivación? → R: fuera de alcance para esta feature.
 - P: ¿Qué disponibilidad se exige? → R: 24×7 con SLA mensual de 99 % (confirmado por el usuario).
 - P: ¿Las ventanas de mantenimiento cuentan como caída? → R: sí; por eso los despliegues y migraciones deben ser sin interrupción (propuesto).
+- P: ¿Qué `code` usan los errores de rutas o métodos fuera del contrato? → R: `NOT_FOUND` (404) y `METHOD_NOT_ALLOWED` (405); `USER_NOT_FOUND` queda solo para usuarios inexistentes (2026-10-04, T010).
 
 ### Pendientes
 - [NEEDS CLARIFICATION] Estrategia de autenticación (p. ej. API key o JWT/OAuth2) antes de exponer la API en producción.

@@ -46,7 +46,7 @@
 
 ## Errores
 
-Los errores deben utilizar el esquema `Error` definido en OpenAPI con códigos estables: `VALIDATION_ERROR` (422), `USER_NOT_FOUND` (404), `EMAIL_ALREADY_EXISTS` (409), `SERVICE_UNAVAILABLE` (503), `INTERNAL_ERROR` (500).
+Los errores deben utilizar el esquema `Error` definido en OpenAPI con códigos estables: `VALIDATION_ERROR` (422), `USER_NOT_FOUND` (404), `EMAIL_ALREADY_EXISTS` (409), `SERVICE_UNAVAILABLE` (503), `INTERNAL_ERROR` (500), `NOT_FOUND` (404, ruta inexistente) y `METHOD_NOT_ALLOWED` (405, método no soportado).
 
 ## GET /health/live
 
