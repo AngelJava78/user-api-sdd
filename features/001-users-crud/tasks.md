@@ -12,7 +12,7 @@
 - [x] T002 [P] Configurar Ruff, mypy --strict, pytest y cobertura en `pyproject.toml`; añadir `.pre-commit-config.yaml`.
 - [x] T003 [P] Crear `infra/docker-compose.yml` con PostgreSQL 17 y `infra/Dockerfile` de la API. (NFR-003)
 - [x] T004 [P] Definir `Settings` en `src/app/config.py` leyendo `.env`. (NFR-005)
-- [ ] T005 Configurar pipeline de CI: lint → typecheck → unit → integración/contrato.
+- [x] T005 Configurar pipeline de CI: lint → typecheck → unit → integración/contrato.
 
 ## Fase 2 — Fundamentos (bloquea todas las historias)
 

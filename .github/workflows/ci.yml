@@ -1,0 +1,63 @@
+# Puertas de calidad de la constitución: lint → typecheck → unit → integración/contrato.
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+
+  typecheck:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run mypy src
+
+  unit:
+    needs: typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      # Cobertura >= 90 % en domain/ y application/ (NFR-007), vía addopts de pyproject.toml.
+      - run: uv run pytest tests/unit
+
+  integration-contract:
+    needs: unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      # Requiere Docker (testcontainers), disponible en ubuntu-latest.
+      # TODO(T008/T014): quitar la tolerancia al código 5 ("no se recogieron pruebas")
+      # cuando existan las primeras pruebas de integración y contrato.
+      - run: uv run pytest tests/integration tests/contract --no-cov || [ $? -eq 5 ]
