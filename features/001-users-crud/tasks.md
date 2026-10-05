@@ -19,7 +19,7 @@
 - [x] T006 Configurar Alembic en `src/app/infrastructure/database/migrations/`.
 - [x] T007 Migración inicial: tabla `users`, índice único `lower(email)`, índice `(status, created_at, id)`. (FR-004, NFR-006)
 - [x] T008 Prueba de integración: `upgrade` sobre base vacía y `downgrade` completo. (NFR-006)
-- [ ] T009 [P] Engine async, sessionmaker y pool configurable. (ADR-0005)
+- [x] T009 [P] Engine async, sessionmaker y pool configurable. (ADR-0005)
 - [ ] T010 [P] Errores de dominio y manejadores HTTP que devuelvan el esquema `Error`. (FR-010)
 - [ ] T011 [P] Logging structlog + middleware `request_id`. (NFR-004)
 - [ ] T012 [P] `tests/conftest.py`: contenedor PostgreSQL, app, cliente httpx, rollback por prueba.

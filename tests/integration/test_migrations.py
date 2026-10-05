@@ -11,18 +11,10 @@ from alembic.config import Config
 from alembic.script import ScriptDirectory
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
-from testcontainers.community.postgres import PostgresContainer
 
 from app.config import get_settings
 
 ROOT = Path(__file__).resolve().parents[2]
-
-
-# TODO(T012): mover el contenedor a tests/conftest.py para compartirlo entre pruebas.
-@pytest.fixture(scope="module")
-def database_url() -> Iterator[str]:
-    with PostgresContainer("postgres:17", driver="asyncpg") as postgres:
-        yield postgres.get_connection_url()
 
 
 @pytest.fixture

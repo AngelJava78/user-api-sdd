@@ -75,7 +75,7 @@ asyncio_default_fixture_loop_scope = "function"
 asyncio_default_test_loop_scope = "function"
 # --cov acepta un argumento opcional: no debe ir al final o consumiría la ruta de pruebas
 # pasada por línea de comandos.
-addopts = ["--cov", "-ra", "--strict-markers", "--strict-config"]
+addopts = ["--cov", "-ra", "--strict-markers", "--strict-config", "--import-mode=importlib"]
 
 # NFR-007: cobertura mínima del 90 % en domain/ y application/.
 [tool.coverage.run]
