@@ -36,8 +36,8 @@
 - [x] T019 [US1] Integración: dos `POST` concurrentes con el mismo email → uno 201, otro 409. (FR-004)
 
 ### Implementación
-- [ ] T020 [US1] Entidad `User` y value objects en `domain/`.
-- [ ] T021 [US1] Protocolo `UserRepository` en `domain/repository.py`.
+- [x] T020 [US1] Entidad `User` y value objects en `domain/`.
+- [x] T021 [US1] Protocolo `UserRepository` en `domain/repository.py`.
 - [ ] T022 [US1] `SqlAlchemyUserRepository.add` traduciendo `IntegrityError` → `EmailAlreadyExists`.
 - [ ] T023 [US1] Caso de uso `create_user` y endpoint `POST /users`.
 
