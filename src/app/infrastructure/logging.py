@@ -17,6 +17,20 @@ _SHARED_PROCESSORS: list[structlog.typing.Processor] = [
 ]
 
 
+class _StdoutHandler(logging.StreamHandler):  # type: ignore[type-arg]
+    """Escribe en el `sys.stdout` vigente en cada emisión, no en el de la configuración.
+
+    Así sigue funcionando si stdout se reemplaza después (p. ej. la captura de pytest).
+    """
+
+    def __init__(self) -> None:
+        super().__init__(sys.stdout)
+
+    def emit(self, record: logging.LogRecord) -> None:
+        self.stream = sys.stdout
+        super().emit(record)
+
+
 def configure_logging(level: str) -> None:
     """Envía structlog y el logging estándar (uvicorn, SQLAlchemy) a stdout como JSON."""
     structlog.configure(
@@ -36,7 +50,7 @@ def configure_logging(level: str) -> None:
             structlog.processors.JSONRenderer(),
         ],
     )
-    handler = logging.StreamHandler(sys.stdout)
+    handler = _StdoutHandler()
     handler.setFormatter(formatter)
 
     root = logging.getLogger()

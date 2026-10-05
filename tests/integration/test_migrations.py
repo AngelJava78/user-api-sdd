@@ -25,10 +25,10 @@ def alembic_config(
     monkeypatch.setenv("DATABASE_URL", database_url)
     get_settings.cache_clear()
     config = Config(toml_file=str(ROOT / "pyproject.toml"))
-    # Cada prueba parte de una base vacía y la deja vacía.
+    # Cada prueba parte de una base vacía y la deja migrada, como la espera tests/conftest.py.
     command.downgrade(config, "base")
     yield config
-    command.downgrade(config, "base")
+    command.upgrade(config, "head")
     get_settings.cache_clear()
 
 
