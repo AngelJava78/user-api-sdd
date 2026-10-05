@@ -5,8 +5,8 @@
 
 ## Preparación
 
-1. Copiar `.env.example` a `.env` y completar `DATABASE_URL`.
-2. Levantar PostgreSQL: `docker compose -f infra/docker-compose.yml up -d db`.
+1. Copiar `.env.example` a `.env` y completar `POSTGRES_*` y `DATABASE_URL`.
+2. Levantar PostgreSQL: `docker compose --env-file .env -f infra/docker-compose.yml up -d db`.
 3. Instalar dependencias: `uv sync`.
 4. Aplicar migraciones: `uv run alembic upgrade head`.
 5. Arrancar la API: `uv run uvicorn app.main:app --workers 2`.
