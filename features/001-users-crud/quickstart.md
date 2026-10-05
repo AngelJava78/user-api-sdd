@@ -22,8 +22,9 @@ Notas para el entorno local:
   resolverse a IPv6 (`::1`) y llegar a otro proceso que escuche en el mismo puerto.
 - Enviar los cuerpos JSON en UTF-8 (p. ej. en PowerShell:
   `-ContentType "application/json; charset=utf-8"`); otra codificación produce 422.
-- No hay `/docs`: el contrato canónico es `spec/openapi/users-api.yaml` (Principio II);
-  puede importarse en Postman, Insomnia o https://editor.swagger.io.
+- Documentación generada a partir del código: `http://127.0.0.1:8080/docs` (Swagger UI),
+  `/redoc` y `/openapi.json`. El contrato canónico sigue siendo `spec/openapi/users-api.yaml`
+  (Principio II); puede importarse en Postman, Insomnia o https://editor.swagger.io.
 
 ## Escenarios
 

@@ -36,7 +36,16 @@ async def test_ready_returns_503_when_database_is_unreachable() -> None:
     assert live.status_code == 200
 
 
-async def test_framework_openapi_is_not_exposed(client: httpx.AsyncClient) -> None:
-    # El contrato canónico es spec/openapi/users-api.yaml (Principio II).
-    for path in ("http://test/openapi.json", "http://test/docs"):
-        assert (await client.get(path)).status_code == 404
+async def test_generated_openapi_and_docs_are_exposed(client: httpx.AsyncClient) -> None:
+    # Documentación derivada del código. La fuente de verdad sigue siendo
+    # spec/openapi/users-api.yaml, validado con Schemathesis (Principio II).
+    openapi = await client.get("http://test/openapi.json")
+    assert openapi.status_code == 200
+    assert {"/api/v1/users", "/api/v1/users/{user_id}", "/api/v1/health/ready"} <= set(
+        openapi.json()["paths"]
+    )
+
+    for path in ("http://test/docs", "http://test/redoc"):
+        response = await client.get(path)
+        assert response.status_code == 200
+        assert response.headers["content-type"].startswith("text/html")

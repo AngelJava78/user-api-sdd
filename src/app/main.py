@@ -28,15 +28,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         finally:
             await engine.dispose()
 
-    # El contrato canónico es spec/openapi/users-api.yaml (Principio II): no se publica
-    # el OpenAPI generado por el framework.
-    app = FastAPI(
-        title="Users API",
-        lifespan=lifespan,
-        openapi_url=None,
-        docs_url=None,
-        redoc_url=None,
-    )
+    # /docs, /redoc y /openapi.json publican el OpenAPI generado a partir del código, como
+    # documentación derivada. La fuente de verdad del contrato sigue siendo
+    # spec/openapi/users-api.yaml, validado con Schemathesis (Principio II).
+    app = FastAPI(title="Users API", lifespan=lifespan)
     register_error_handlers(app)
     app.add_middleware(RequestIdMiddleware)
     app.include_router(health.router, prefix=API_PREFIX)
