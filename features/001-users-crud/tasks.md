@@ -8,7 +8,7 @@
 
 ## Fase 1 — Preparación
 
-- [ ] T001 Inicializar proyecto con uv y Python 3.13; completar `pyproject.toml` con dependencias de `docs/tech-stack.md`.
+- [x] T001 Inicializar proyecto con uv y Python 3.13; completar `pyproject.toml` con dependencias de `docs/tech-stack.md`.
 - [ ] T002 [P] Configurar Ruff, mypy --strict, pytest y cobertura en `pyproject.toml`; añadir `.pre-commit-config.yaml`.
 - [ ] T003 [P] Crear `infra/docker-compose.yml` con PostgreSQL 17 y `infra/Dockerfile` de la API. (NFR-003)
 - [ ] T004 [P] Definir `Settings` en `src/app/config.py` leyendo `.env`. (NFR-005)
