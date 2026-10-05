@@ -6,6 +6,8 @@ Las migraciones se ejecutan como paso previo al despliegue, no al arrancar la AP
 
 import asyncio
 import logging
+from logging.config import fileConfig
+from pathlib import Path
 
 from alembic import context
 from sqlalchemy import pool
@@ -17,8 +19,11 @@ from app.infrastructure.database.models import Base
 
 config = context.config
 
-if config.config_file_name is None:
-    # Sin alembic.ini: logging mínimo para ver el progreso de las migraciones.
+# La CLI siempre pasa "alembic.ini" aunque no exista; sin él, logging mínimo
+# para ver el progreso de las migraciones.
+if config.config_file_name is not None and Path(config.config_file_name).is_file():
+    fileConfig(config.config_file_name)
+else:
     logging.basicConfig(format="%(levelname)-5.5s [%(name)s] %(message)s", level=logging.WARNING)
     logging.getLogger("alembic").setLevel(logging.INFO)
 

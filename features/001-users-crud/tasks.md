@@ -17,7 +17,7 @@
 ## Fase 2 — Fundamentos (bloquea todas las historias)
 
 - [x] T006 Configurar Alembic en `src/app/infrastructure/database/migrations/`.
-- [ ] T007 Migración inicial: tabla `users`, índice único `lower(email)`, índice `(status, created_at, id)`. (FR-004, NFR-006)
+- [x] T007 Migración inicial: tabla `users`, índice único `lower(email)`, índice `(status, created_at, id)`. (FR-004, NFR-006)
 - [ ] T008 Prueba de integración: `upgrade` sobre base vacía y `downgrade` completo. (NFR-006)
 - [ ] T009 [P] Engine async, sessionmaker y pool configurable. (ADR-0005)
 - [ ] T010 [P] Errores de dominio y manejadores HTTP que devuelvan el esquema `Error`. (FR-010)
