@@ -7,6 +7,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.application.dto import UserPage
 from app.domain.user import User
 
 
@@ -62,4 +63,20 @@ class UserResponse(BaseModel):
             status=user.status,
             created_at=user.created_at,
             updated_at=user.updated_at,
+        )
+
+
+class UserCollection(BaseModel):
+    items: list[UserResponse]
+    total: int
+    limit: int
+    offset: int
+
+    @classmethod
+    def from_page(cls, page: UserPage) -> Self:
+        return cls(
+            items=[UserResponse.from_domain(user) for user in page.items],
+            total=page.total,
+            limit=page.limit,
+            offset=page.offset,
         )

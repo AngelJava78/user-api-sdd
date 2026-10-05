@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.routing import Match, Route
 
 from app.api.schemas import ErrorCode, ErrorResponse
 from app.domain.errors import EmailAlreadyExists, InvalidUserData, UserNotFound
@@ -86,12 +87,30 @@ async def _handle_http_exception(request: Request, exc: Exception) -> JSONRespon
         if exc.status_code == status.HTTP_400_BAD_REQUEST
         else exc.status_code
     )
+    headers = dict(exc.headers or {})
+    if exc.status_code == status.HTTP_405_METHOD_NOT_ALLOWED:
+        headers["Allow"] = ", ".join(_allowed_methods(request))
     return error_response(
         status_code,
         _HTTP_STATUS_CODES.get(exc.status_code, default),
         str(exc.detail),
-        headers=exc.headers,  # conserva, p. ej., Allow en 405
+        headers=headers,
     )
+
+
+def _allowed_methods(request: Request) -> list[str]:
+    """Métodos de todas las rutas que coinciden con la ruta pedida.
+
+    Starlette solo anuncia los de la primera coincidencia, y FastAPI registra cada método
+    (GET, POST…) como una ruta distinta.
+    """
+    methods: set[str] = set()
+    for route in request.app.router.routes:
+        if isinstance(route, Route) and route.methods:
+            match, _ = route.matches({**request.scope, "method": "GET"})
+            if match != Match.NONE:
+                methods |= route.methods
+    return sorted(methods)
 
 
 async def _handle_unexpected(request: Request, exc: Exception) -> JSONResponse:

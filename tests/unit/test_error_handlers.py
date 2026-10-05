@@ -136,3 +136,24 @@ async def test_unparseable_body_returns_422(client: httpx.AsyncClient) -> None:
     )
 
     assert_error(response, 422, "VALIDATION_ERROR")
+
+
+async def test_method_not_allowed_lists_every_method_of_the_path() -> None:
+    # Cada método es una ruta distinta en FastAPI; Allow debe reunirlos todos.
+    app = FastAPI()
+    register_error_handlers(app)
+
+    @app.get("/items")
+    async def list_items() -> None:
+        return None
+
+    @app.post("/items")
+    async def create_item() -> None:
+        return None
+
+    transport = httpx.ASGITransport(app=app)
+    async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.delete("/items")
+
+    assert_error(response, 405, "METHOD_NOT_ALLOWED")
+    assert set(response.headers["allow"].split(", ")) == {"GET", "POST"}

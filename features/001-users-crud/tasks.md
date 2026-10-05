@@ -50,7 +50,7 @@
 
 ### Implementación
 - [x] T027 [US2] Repositorio: `get_by_id`, `list_active(limit, offset)`, `count_active`.
-- [ ] T028 [US2] Casos de uso y endpoints `GET /users`, `GET /users/{user_id}`.
+- [x] T028 [US2] Casos de uso y endpoints `GET /users`, `GET /users/{user_id}`.
 
 ## Fase 5 — US-3 Actualizar usuario (P2)
 
