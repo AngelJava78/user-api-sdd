@@ -111,6 +111,7 @@ Como cliente quiero desactivar un usuario sin perder su registro.
 - P: ¿Qué disponibilidad se exige? → R: 24×7 con SLA mensual de 99 % (confirmado por el usuario).
 - P: ¿Las ventanas de mantenimiento cuentan como caída? → R: sí; por eso los despliegues y migraciones deben ser sin interrupción (propuesto).
 - P: ¿Qué `code` usan los errores de rutas o métodos fuera del contrato? → R: `NOT_FOUND` (404) y `METHOD_NOT_ALLOWED` (405); `USER_NOT_FOUND` queda solo para usuarios inexistentes (2026-10-04, T010).
+- P: ¿Qué ocurre con parámetros de consulta no declarados? → R: en `/users`, 422 `VALIDATION_ERROR` con el parámetro en `details` (igual que los campos extra del cuerpo); `/health/*` los ignora para no romper monitores con parámetros anti-caché (2026-10-04, T028).
 
 ### Pendientes
 - [NEEDS CLARIFICATION] Estrategia de autenticación (p. ej. API key o JWT/OAuth2) antes de exponer la API en producción.
