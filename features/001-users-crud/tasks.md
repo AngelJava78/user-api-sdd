@@ -29,9 +29,9 @@
 ## Fase 3 — US-1 Registrar usuario (P1) 🎯 MVP
 
 ### Pruebas (primero)
-- [ ] T015 [P] [US1] Unit: value object `Email` (normalización, formato). (FR-005)
-- [ ] T016 [P] [US1] Unit: value object `PersonName` (1–30, caracteres permitidos). (FR-006)
-- [ ] T017 [P] [US1] Unit: caso de uso `create_user` con repositorio en memoria (activo, duplicado). (FR-003, FR-004)
+- [x] T015 [P] [US1] Unit: value object `Email` (normalización, formato). (FR-005)
+- [x] T016 [P] [US1] Unit: value object `PersonName` (1–30, caracteres permitidos). (FR-006)
+- [x] T017 [P] [US1] Unit: caso de uso `create_user` con repositorio en memoria (activo, duplicado). (FR-003, FR-004)
 - [ ] T018 [P] [US1] Integración: `POST /users` → 201, 409 case-insensitive, 422. (FR-003, FR-004, FR-006)
 - [ ] T019 [US1] Integración: dos `POST` concurrentes con el mismo email → uno 201, otro 409. (FR-004)
 

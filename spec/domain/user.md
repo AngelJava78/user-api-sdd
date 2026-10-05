@@ -61,6 +61,15 @@ Aplican a `name`, `lastname` y `second_lastname`:
 - Se recortan los espacios en los extremos y se convierte a minúsculas antes de validar y persistir.
 - Longitud máxima 320 caracteres.
 
+## Formato de email
+
+Tras normalizar, un email es válido si:
+
+- Contiene exactamente una `@` y ningún espacio en blanco.
+- La parte local (antes de `@`) no está vacía y tiene como máximo 64 caracteres.
+- El dominio (después de `@`) contiene al menos un punto, ninguna etiqueta vacía
+  (p. ej. `a..com` o `.com`) y un TLD de al menos 2 caracteres.
+
 ## Decisiones pendientes
 
 - Reactivación de usuarios: fuera de alcance de la versión 1.
