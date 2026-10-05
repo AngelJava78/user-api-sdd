@@ -1,6 +1,6 @@
 # Feature 001 — Gestión de usuarios (CRUD)
 
-**Estado:** Borrador para revisión · **Creada:** 2026-10-05 · **Rama sugerida:** `001-users-crud`
+**Estado:** Aceptado · **Creada:** 2026-10-05 · **Rama sugerida:** `001-users-crud`
 
 > Esta especificación describe **qué** debe hacer el sistema y **por qué**, no cómo.
 > Las decisiones técnicas viven en `plan.md`. La especificación viva consolidada del sistema
