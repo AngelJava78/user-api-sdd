@@ -58,6 +58,4 @@ jobs:
           enable-cache: true
       - run: uv sync --locked
       # Requiere Docker (testcontainers), disponible en ubuntu-latest.
-      # TODO(T008/T014): quitar la tolerancia al código 5 ("no se recogieron pruebas")
-      # cuando existan las primeras pruebas de integración y contrato.
-      - run: uv run pytest tests/integration tests/contract --no-cov || [ $? -eq 5 ]
+      - run: uv run pytest tests/integration tests/contract --no-cov
