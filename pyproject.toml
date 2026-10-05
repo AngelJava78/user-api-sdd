@@ -36,6 +36,23 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/app"]
 
+[tool.alembic]
+script_location = "%(here)s/src/app/infrastructure/database/migrations"
+file_template = "%%(year)d_%%(month).2d_%%(day).2d_%%(hour).2d%%(minute).2d-%%(rev)s_%%(slug)s"
+output_encoding = "utf-8"
+
+[[tool.alembic.post_write_hooks]]
+name = "ruff_check"
+type = "module"
+module = "ruff"
+options = "check --fix REVISION_SCRIPT_FILENAME"
+
+[[tool.alembic.post_write_hooks]]
+name = "ruff_format"
+type = "module"
+module = "ruff"
+options = "format REVISION_SCRIPT_FILENAME"
+
 [tool.ruff]
 line-length = 100
 target-version = "py313"
@@ -56,7 +73,9 @@ testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 asyncio_default_test_loop_scope = "function"
-addopts = ["-ra", "--strict-markers", "--strict-config", "--cov"]
+# --cov acepta un argumento opcional: no debe ir al final o consumiría la ruta de pruebas
+# pasada por línea de comandos.
+addopts = ["--cov", "-ra", "--strict-markers", "--strict-config"]
 
 # NFR-007: cobertura mínima del 90 % en domain/ y application/.
 [tool.coverage.run]
