@@ -108,6 +108,19 @@ async def test_offset_beyond_total_returns_empty_items(
     assert body["total"] == 2
 
 
+async def test_huge_offset_returns_empty_items(
+    client: httpx.AsyncClient, db_session: AsyncSession
+) -> None:
+    # El contrato no acota offset; más allá de BIGINT sigue siendo "offset > total".
+    await insert_active(db_session, 1)
+    huge = 2**63
+
+    response = await client.get("/users", params={"offset": huge})
+
+    assert response.status_code == 200
+    assert response.json() == {"items": [], "total": 1, "limit": 20, "offset": huge}
+
+
 async def test_empty_table(client: httpx.AsyncClient) -> None:
     body = (await client.get("/users")).json()
 

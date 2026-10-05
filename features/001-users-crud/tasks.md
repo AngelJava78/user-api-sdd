@@ -49,7 +49,7 @@
 - [x] T026 [P] [US2] Integración: `GET /users/{id}` activo, inactivo, 404, id no UUID 422. (FR-002)
 
 ### Implementación
-- [ ] T027 [US2] Repositorio: `get_by_id`, `list_active(limit, offset)`, `count_active`.
+- [x] T027 [US2] Repositorio: `get_by_id`, `list_active(limit, offset)`, `count_active`.
 - [ ] T028 [US2] Casos de uso y endpoints `GET /users`, `GET /users/{user_id}`.
 
 ## Fase 5 — US-3 Actualizar usuario (P2)
