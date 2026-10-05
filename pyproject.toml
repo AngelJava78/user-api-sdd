@@ -59,6 +59,8 @@ target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "B", "UP", "N", "SIM", "RUF", "ASYNC"]
+# N818: los errores de dominio usan los nombres del plan (UserNotFound, EmailAlreadyExists…).
+ignore = ["N818"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["app"]
