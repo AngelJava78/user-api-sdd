@@ -38,7 +38,7 @@
 ### Implementación
 - [x] T020 [US1] Entidad `User` y value objects en `domain/`.
 - [x] T021 [US1] Protocolo `UserRepository` en `domain/repository.py`.
-- [ ] T022 [US1] `SqlAlchemyUserRepository.add` traduciendo `IntegrityError` → `EmailAlreadyExists`.
+- [x] T022 [US1] `SqlAlchemyUserRepository.add` traduciendo `IntegrityError` → `EmailAlreadyExists`.
 - [ ] T023 [US1] Caso de uso `create_user` y endpoint `POST /users`.
 
 ## Fase 4 — US-2 Consultar usuarios (P1)
