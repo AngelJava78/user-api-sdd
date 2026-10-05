@@ -5,11 +5,25 @@
 
 ## Preparación
 
-1. Copiar `.env.example` a `.env` y completar `POSTGRES_*` y `DATABASE_URL`.
-2. Levantar PostgreSQL: `docker compose --env-file .env -f infra/docker-compose.yml up -d db`.
+1. Copiar `.env.example` a `.env` y completar `POSTGRES_*` y `DATABASE_URL`
+   (desde el host, `DATABASE_URL` apunta a `localhost:${POSTGRES_PORT}`).
+2. Levantar PostgreSQL: `docker compose --env-file .env -f infra/docker-compose.yml up -d --wait db`.
 3. Instalar dependencias: `uv sync`.
 4. Aplicar migraciones: `uv run alembic upgrade head`.
-5. Arrancar la API: `uv run uvicorn app.main:app --workers 2`.
+5. Arrancar la API: `uv run uvicorn app.main:app --port 8080 --workers 2`
+   (en desarrollo, `--reload` en lugar de `--workers 2`).
+
+Notas para el entorno local:
+
+- Puertos: si `5432` u `8000` están ocupados o reservados (en Windows, ver
+  `netsh interface ipv4 show excludedportrange protocol=tcp`), usar otro `POSTGRES_PORT`
+  (p. ej. `55432`) y otro `--port` para la API (p. ej. `8080`). Los ejemplos usan `8080`.
+- Usar `http://127.0.0.1:<puerto>` en lugar de `localhost`: en Windows, `localhost` puede
+  resolverse a IPv6 (`::1`) y llegar a otro proceso que escuche en el mismo puerto.
+- Enviar los cuerpos JSON en UTF-8 (p. ej. en PowerShell:
+  `-ContentType "application/json; charset=utf-8"`); otra codificación produce 422.
+- No hay `/docs`: el contrato canónico es `spec/openapi/users-api.yaml` (Principio II);
+  puede importarse en Postman, Insomnia o https://editor.swagger.io.
 
 ## Escenarios
 
