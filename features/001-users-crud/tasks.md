@@ -24,7 +24,7 @@
 - [x] T011 [P] Logging structlog + middleware `request_id`. (NFR-004)
 - [x] T012 [P] `tests/conftest.py`: contenedor PostgreSQL, app, cliente httpx, rollback por prueba.
 - [x] T013 Prueba + implementación de `GET /health/live` y `GET /health/ready` (503 si la base no responde). (FR-011, NFR-008)
-- [ ] T014 Prueba de contrato base con Schemathesis (inicialmente en rojo). (SC-002)
+- [x] T014 Prueba de contrato base con Schemathesis (inicialmente en rojo). (SC-002)
 
 ## Fase 3 — US-1 Registrar usuario (P1) 🎯 MVP
 
