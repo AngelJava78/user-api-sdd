@@ -1,0 +1,18 @@
+# Archivo de configuración previsto para el proyecto Python.
+# En esta entrega NO contiene configuración ejecutable (sin código, por decisión SDD).
+# Se completará en la tarea T001/T002 de features/001-users-crud/tasks.md.
+#
+# Stack aprobado en docs/tech-stack.md (ADR-0004 a ADR-0006):
+#
+# [project]
+#   requires-python = ">=3.13"
+#   dependencias: fastapi, pydantic, pydantic-settings, uvicorn[standard],
+#                 sqlalchemy[asyncio], asyncpg, alembic, structlog
+#
+# [dependency-groups] dev:
+#   pytest, pytest-asyncio, pytest-cov, httpx, schemathesis,
+#   testcontainers[postgres], locust, ruff, mypy, pre-commit
+#
+# [tool.ruff]    line-length = 100, target-version = "py313"
+# [tool.mypy]    strict = true
+# [tool.pytest]  asyncio_mode = "auto", cobertura mínima 90 % en domain/ y application/

@@ -1,0 +1,319 @@
+openapi: 3.1.0
+info:
+  title: Users API
+  version: 0.3.0
+  description: >-
+    Contrato canónico de la API REST de usuarios. Este archivo es la fuente de verdad
+    del contrato HTTP (ADR-0002) y no una implementación.
+servers:
+- url: /api/v1
+tags:
+- name: Users
+- name: Health
+paths:
+  /health/live:
+    get:
+      tags:
+      - Health
+      summary: Liveness probe (el proceso responde)
+      description: No consulta dependencias. Si falla, el orquestador reinicia la instancia.
+      operationId: getLiveness
+      responses:
+        '200':
+          description: Proceso vivo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /health/ready:
+    get:
+      tags:
+      - Health
+      summary: Readiness probe (la instancia puede recibir tráfico)
+      description: Verifica la conexión a PostgreSQL. Si falla, el balanceador deja de enviar tráfico a la instancia.
+      operationId: getReadiness
+      responses:
+        '200':
+          description: Lista para recibir tráfico
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '503':
+          description: Base de datos no disponible o instancia apagándose (code SERVICE_UNAVAILABLE)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users:
+    get:
+      tags:
+      - Users
+      summary: List active users
+      operationId: listUsers
+      parameters:
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Offset'
+      responses:
+        '200':
+          description: Página de usuarios activos ordenada por created_at, id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCollection'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    post:
+      tags:
+      - Users
+      summary: Create user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '201':
+          description: User created
+          headers:
+            Location:
+              description: URL del recurso creado
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '409':
+          description: Email already exists (code EMAIL_ALREADY_EXISTS)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /users/{user_id}:
+    parameters:
+    - $ref: '#/components/parameters/UserId'
+    get:
+      tags:
+      - Users
+      summary: Get user (active or inactive)
+      operationId: getUser
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    put:
+      tags:
+      - Users
+      summary: Update user personal data
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+      - Users
+      summary: Deactivate user (logical, idempotent)
+      operationId: deactivateUser
+      responses:
+        '204':
+          description: User deactivated (or already inactive)
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+components:
+  parameters:
+    UserId:
+      name: user_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    Offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+  responses:
+    NotFound:
+      description: User not found (code USER_NOT_FOUND)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: Validation error (code VALIDATION_ERROR)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    PersonName:
+      type: string
+      minLength: 1
+      maxLength: 30
+      description: >-
+        Letras Unicode (incluye acentos y ñ), espacios, guion y apóstrofo. Debe empezar
+        con letra. Se recortan espacios en los extremos.
+    User:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - email
+      - name
+      - lastname
+      - second_lastname
+      - status
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+          maxLength: 320
+          description: Normalizado en minúsculas.
+        name:
+          $ref: '#/components/schemas/PersonName'
+        lastname:
+          $ref: '#/components/schemas/PersonName'
+        second_lastname:
+          oneOf:
+          - $ref: '#/components/schemas/PersonName'
+          - type: 'null'
+        status:
+          type: boolean
+          description: true = ACTIVE, false = INACTIVE
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    CreateUser:
+      type: object
+      additionalProperties: false
+      required:
+      - email
+      - name
+      - lastname
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 320
+        name:
+          $ref: '#/components/schemas/PersonName'
+        lastname:
+          $ref: '#/components/schemas/PersonName'
+        second_lastname:
+          oneOf:
+          - $ref: '#/components/schemas/PersonName'
+          - type: 'null'
+    UpdateUser:
+      type: object
+      additionalProperties: false
+      description: email, id y status no son modificables; enviarlos produce 422.
+      required:
+      - name
+      - lastname
+      properties:
+        name:
+          $ref: '#/components/schemas/PersonName'
+        lastname:
+          $ref: '#/components/schemas/PersonName'
+        second_lastname:
+          oneOf:
+          - $ref: '#/components/schemas/PersonName'
+          - type: 'null'
+    UserCollection:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - total
+      - limit
+      - offset
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        total:
+          type: integer
+          minimum: 0
+          description: Total de usuarios activos.
+        limit:
+          type: integer
+        offset:
+          type: integer
+    Health:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - ok
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+          - USER_NOT_FOUND
+          - EMAIL_ALREADY_EXISTS
+          - SERVICE_UNAVAILABLE
+          - INTERNAL_ERROR
+        message:
+          type: string
+        details:
+          type: object
+          description: Detalle por campo en errores de validación.
