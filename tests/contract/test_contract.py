@@ -28,7 +28,6 @@ def contract_schema(migrated_database_url: str) -> OpenApiSchema:
 # 404 NOT_FOUND (respuesta documentada); su comportamiento real lo cubren T026/T030/T034.
 PENDING = {
     "GET /users": "T028",
-    "POST /users": "T023",
 }
 
 schema = schemathesis.pytest.from_fixture("contract_schema")
@@ -40,9 +39,11 @@ def test_api_conforms_to_contract(case: schemathesis.Case) -> None:
     if task is None:
         case.call_and_validate()
         return
-    # Pendiente: la ruta aún no existe (404 NOT_FOUND). En cuanto exista, hay que quitarla
-    # de PENDING para que Schemathesis la valide (equivalente a un xfail estricto).
+    # Pendiente: la ruta no existe (404 NOT_FOUND) o existe solo con otros métodos
+    # (405 METHOD_NOT_ALLOWED). En cuanto se implemente, hay que quitarla de PENDING para que
+    # Schemathesis la valide (equivalente a un xfail estricto).
     response = case.call()
-    if response.status_code == 404 and response.json().get("code") == "NOT_FOUND":
+    not_implemented = {404: "NOT_FOUND", 405: "METHOD_NOT_ALLOWED"}
+    if not_implemented.get(response.status_code) == response.json().get("code"):
         pytest.xfail(f"{case.operation.label} pendiente de implementar ({task})")
     pytest.fail(f"{case.operation.label} ya está implementada: quítala de PENDING ({task})")

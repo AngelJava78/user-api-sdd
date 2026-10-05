@@ -40,7 +40,8 @@ def configure_logging(level: str) -> None:
         ],
         logger_factory=structlog.stdlib.LoggerFactory(),
         wrapper_class=structlog.stdlib.BoundLogger,
-        cache_logger_on_first_use=True,
+        # Sin caché: los loggers de módulo respetan reconfiguraciones (y capture_logs en pruebas).
+        cache_logger_on_first_use=False,
     )
     formatter = structlog.stdlib.ProcessorFormatter(
         foreign_pre_chain=_SHARED_PROCESSORS,

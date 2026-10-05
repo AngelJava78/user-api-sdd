@@ -124,3 +124,15 @@ def test_domain_errors_carry_context() -> None:
     assert UserNotFound(USER_ID).user_id == USER_ID
     assert EmailAlreadyExists("ana@mail.com").email == "ana@mail.com"
     assert InvalidUserData("x").details is None
+
+
+async def test_unparseable_body_returns_422(client: httpx.AsyncClient) -> None:
+    # El contrato no documenta 400: un cuerpo ilegible es un error de validación.
+    response = await client.post(
+        f"/validate/{USER_ID}",
+        params={"limit": 1},
+        content=b"&\xff",
+        headers={"content-type": "application/json"},
+    )
+
+    assert_error(response, 422, "VALIDATION_ERROR")

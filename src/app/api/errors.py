@@ -80,8 +80,14 @@ async def _handle_http_exception(request: Request, exc: Exception) -> JSONRespon
         if exc.status_code >= status.HTTP_500_INTERNAL_SERVER_ERROR
         else ErrorCode.VALIDATION_ERROR
     )
+    # El contrato no documenta 400: un cuerpo ilegible se trata como error de validación (422).
+    status_code = (
+        status.HTTP_422_UNPROCESSABLE_CONTENT
+        if exc.status_code == status.HTTP_400_BAD_REQUEST
+        else exc.status_code
+    )
     return error_response(
-        exc.status_code,
+        status_code,
         _HTTP_STATUS_CODES.get(exc.status_code, default),
         str(exc.detail),
         headers=exc.headers,  # conserva, p. ej., Allow en 405
